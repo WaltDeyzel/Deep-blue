@@ -239,8 +239,8 @@ def find():
     points = []
     s_p = [0, -12]
     d = []
-    p = 20 # points
-    count = 30
+    p = 100 # points
+    count = 500
     sk = 0
     generate(p, points, count)
     t = turtle
