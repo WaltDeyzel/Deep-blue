@@ -2,20 +2,23 @@ from Genome import Genome
 import operator
 import time
 from numpy import random as npR
-from Breeding import generate, pick, crossover2, shuffle, crossover
+from Crossover import crossover, crossover2, crossover3
+from Breeding import pick, shuffle, generate
 import matplotlib.pyplot as plt
 import math
 
 class Simulate:
 
-    def __init__(self, number_of_points, population_total, mutation_rate, solution, generations):
+    def __init__(self, number_of_points, population_total, crossover_rate, mutation_rate, solution, generations, crossover):
         self.number_of_points = number_of_points
         self.population_total = population_total
+        self.crossover_rate = crossover_rate
         self.mutation_rate = mutation_rate
         self.solution = solution
         self.population = []
         self.generations = generations
 
+        self.crossover = crossover
         self.results = []
     
     def run(self):
@@ -42,14 +45,19 @@ class Simulate:
             self.population.append(sorted_population[0])
             self.population.append(sorted_population[1])
 
-            for _ in range(self.population_total-2):
+            while len(self.population) != self.population_total:
 
-                option_1 = pick(sorted_population)
-                option_2 = pick(sorted_population)
-                new_genome = Genome(crossover(option_1, option_2))
+                new_genome = pick(sorted_population)
+
+                if npR.uniform() < self.crossover_rate:
+                    option_1 = new_genome
+                    option_2 = pick(sorted_population)
+                    new_genome = Genome(self.crossover(option_1, option_2))
+
                 if npR.uniform() < self.mutation_rate:
                     new_genome.mutate()
                 self.population.append(new_genome)
+
         self.population[0].draw(self.population[0].getSolution())
         return self.results
 
@@ -57,36 +65,26 @@ class Simulate:
 
 if __name__ == "__main__":
 
-    simulations = 10000
-    # population_size = 30
-    path = generate(100)
-    # sim_1 = Simulate(len(path), population_size, 0.1, path, simulations)
-    # sim_2 = Simulate(len(path), population_size, 0.15, path, simulations)
-    # sim_3 = Simulate(len(path), population_size, 0.2, path, simulations)
-    # sim_4 = Simulate(len(path), population_size, 0.25, path, simulations)
-    # sim_5 = Simulate(len(path), population_size, 0.3, path, simulations)
-    # sim_6 = Simulate(len(path), population_size, 0.7, path, simulations)
+    simulations = 1000
+    crossover_rate = 1
+    mutation_rate = 0.25
+    population_size = 100
+    path_len = 50
 
-    # plt.plot(sim_1.run()) #BLUE
+    # path = generate(path_len)
+    path = [[-273, -1], [215, -65], [55, 142], [-192, -135], [-38, 133], [74, 120], [275, 299], [207, 188], [-153, 37], [82, 208], [1, 182], [-2, 99], [-190, 8], [-281, -128], [129, 36], [163, -129], [262, 242], [-299, 21], [153, 4], [210, 209], [109, -246], [179, -5], [-173, 28], [-156, -180], [268, -97], [238, 25], [-12, -174], [43, 275], [-12, -181], [-195, -217], [297, -54], [-258, 117], [275, -214], [45, 249], [-233, 154], [139, 171], [-194, -4], [295, -271], [101, 37], [-102, -163], [37, 229], [151, -297], [-148, -172], [263, -243], [-232, 230], [-253, 4], [35, 212], [267, -17], [-229, -38], [-11, 59]]
+    
+    sim_1 = Simulate(path_len, population_size, crossover_rate, mutation_rate, path, simulations, crossover)
+    # sim_2 = Simulate(path_len, 30, crossover_rate, mutation_rate, path, simulations, crossover)
+    # sim_3 = Simulate(path_len, 30, crossover_rate, mutation_rate, path, simulations, crossover)
+    # sim_4 = Simulate(path_len, 30, crossover_rate, mutation_rate, path, simulations, crossover)
+    # sim_5 = Simulate(path_len, 30, crossover_rate, mutation_rate, path, simulations, crossover)
+    # sim_6 = Simulate(path_len, 30, crossover_rate, mutation_rate, path, simulations, crossover)
+
+    plt.plot(sim_1.run()) #BLUE
     # plt.plot(sim_2.run()) #ORANGE
     # plt.plot(sim_3.run()) #GREEN
     # plt.plot(sim_4.run()) #RED
     # plt.plot(sim_5.run()) #PURPLE
     # plt.plot(sim_6.run()) #BROWN
-    # plt.show()
-   
-    mutation_rate = 0.2
-    sim_1 = Simulate(len(path), 5, mutation_rate, path, simulations)
-    sim_2 = Simulate(len(path), 10, mutation_rate, path, simulations)
-    sim_3 = Simulate(len(path), 20, mutation_rate, path, simulations)
-    sim_4 = Simulate(len(path), 30, mutation_rate, path, simulations)
-    sim_5 = Simulate(len(path), 40, mutation_rate, path, simulations)
-    sim_6 = Simulate(len(path), 70, mutation_rate, path, simulations)
-
-    plt.plot(sim_1.run()) #BLUE
-    plt.plot(sim_2.run()) #ORANGE
-    plt.plot(sim_3.run()) #GREEN
-    plt.plot(sim_4.run()) #RED
-    plt.plot(sim_5.run()) #PURPLE
-    plt.plot(sim_6.run()) #BROWN
     plt.show()

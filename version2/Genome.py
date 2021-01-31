@@ -27,12 +27,6 @@ class Genome:
         t.pencolor('blue')
         t.goto(0,0)
         q = 1
-        # for cor in salution:
-        #     t.speed(0)
-        #     t.penup()
-        #     t.goto(cor[0]*q,cor[1]*q)
-        #     t.dot()
-        # t.goto(0,0)
         t.dot()
         for cor in salution:
             t.speed(0.0001)
@@ -45,13 +39,12 @@ class Genome:
         solution = self.getSolution()
         tot = 0
 
-        #tot += math.sqrt(solution[0][0] + solution[0][1]**2)
+        tot += math.sqrt(solution[0][0]**2 + solution[0][1]**2)
         for i in range(len(solution)-1):
             tot += math.sqrt((solution[i][0] - solution[i+1][0])**2 + (solution[i][1]-solution[i+1][1])**2)
-        #tot += math.sqrt(solution[-1][0] + solution[-1][1]**2)
+        tot += math.sqrt(solution[-1][0]**2 + solution[-1][1]**2)
 
         self.fit = 1/tot**2
-        #print(1/self.fit)
     
     def mutate(self):
         solution = self.getSolution()
@@ -66,7 +59,3 @@ class Genome:
 
     def setFitness2Population(self, total):
         self.fitness_ratio = self.fit/total
-    
-    def evolve(self):
-        #self.fitness()
-        self.draw(self.getSolution())

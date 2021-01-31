@@ -2,14 +2,14 @@ import operator
 import time
 from Genome import Genome
 from numpy import random as npR
-from Breeding import *
-
+from Breeding import pick, generate, shuffle
+from Crossover import crossover3
 
 if __name__ == "__main__":
     
     number_of_points = 35 # points
     population_total = 15
-    mutation_rate = 0.3
+    mutation_rate = 0.25
     solution = generate(number_of_points)
     population = []
 
@@ -17,7 +17,7 @@ if __name__ == "__main__":
         scramble = shuffle(solution)
         population.append(Genome(scramble))
     
-    for i in range(1000):
+    for i in range(500):
         print('GENERATION :', i, round(1/population[0].getFitness()))
         population_fitness = 0
         
@@ -39,7 +39,9 @@ if __name__ == "__main__":
 
             option_1 = pick(sorted_population)
             option_2 = pick(sorted_population)
-            new_genome = Genome(crossover2(option_1, option_2))
+            option_3 = pick(sorted_population)
+            new_genome = Genome(crossover3(option_1, option_2, option_3))
+            #new_genome = Genome(crossover2(option_1, option_2))
             if npR.uniform() < mutation_rate:
                 new_genome.mutate()
             population.append(new_genome)
