@@ -2,8 +2,8 @@ import operator
 import time
 from Genome import Genome
 from numpy import random as npR
-from Breeding import pick, generate, shuffle
-from Crossover import crossover3
+from Breeding import generate, shuffle, rouletteSelection, tournamentSelection
+from Crossover import crossover, crossover2, crossover3
 
 if __name__ == "__main__":
     
@@ -37,9 +37,9 @@ if __name__ == "__main__":
 
         for _ in range(population_total-2):
 
-            option_1 = pick(sorted_population)
-            option_2 = pick(sorted_population)
-            option_3 = pick(sorted_population)
+            option_1 = rouletteSelection(sorted_population)
+            option_2 = rouletteSelection(sorted_population)
+            option_3 = rouletteSelection(sorted_population)
             new_genome = Genome(crossover3(option_1, option_2, option_3))
             #new_genome = Genome(crossover2(option_1, option_2))
             if npR.uniform() < mutation_rate:

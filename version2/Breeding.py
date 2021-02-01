@@ -16,7 +16,7 @@ def shuffle(cordinates):
     shuf = random.sample(cordinates, len(cordinates))
     return(shuf)
 
-def pick(sorted_population):
+def rouletteSelection(sorted_population):
     
     x = npR.uniform()
     tot = 0
@@ -25,4 +25,17 @@ def pick(sorted_population):
         if(x<=tot):
             return genome 
 
-    return(sorted_population[-1])
+    return(sorted_population[0])
+
+def tournamentSelection(sorted_population):
+    x_1 = int(npR.uniform()*len(sorted_population))
+    x_2 = int(npR.uniform()*len(sorted_population))
+
+    option_1 = sorted_population[x_1]
+    option_2 = sorted_population[x_2]
+
+    if option_1.getFitness() < option_2.getFitness():
+        return option_2
+    return option_1
+
+
